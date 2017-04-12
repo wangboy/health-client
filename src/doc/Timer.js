@@ -4,6 +4,9 @@
 import React from 'react';
 import './Timer.css'
 
+import 'es6-promise'
+import 'isomorphic-fetch'
+
 class Timer extends React.Component {
   constructor(props) {
     super(props);
@@ -11,7 +14,11 @@ class Timer extends React.Component {
       seconds: 0,
       resetTimes: 0,
       text: '',
-      sel: '10'
+      sel: '10',
+
+      fetching: false,
+      fetchResult: "waiting",
+      fetchTimes: 0
     };
 
     this.reset = this.reset.bind(this)
@@ -23,9 +30,24 @@ class Timer extends React.Component {
   }
 
   tick() {
-    this.setState((preState)=> ({
+    this.setState((preState) => ({
       seconds: preState.seconds + 1
     }));
+
+    if (this.state.fetching === false) {
+      this.setState({fetching: true})
+      fetch('www.baidu.com')
+        .then(response => this.setState((preState) => ( {
+          fetching: false,
+          fetchResult: "success",
+          fetchTimes: preState.fetchTimes + 1
+        })))
+        .catch(e => this.setState({fetching: false, fetchResult: "error"}))
+    } else {
+      this.setState({fetchResult: "waiting"})
+    }
+
+
   }
 
   reset() {
@@ -83,6 +105,7 @@ class Timer extends React.Component {
 
     return (
       <div className="Timer">
+        <p>Fetch : {this.state.fetchResult} : {this.state.fetchTimes}</p>
         <p onClick={this.reset}>Seconds : {this.state.seconds}</p>
         {even}
         <button className="btn" type="button" onClick={this.reset}>Reset Timer</button>

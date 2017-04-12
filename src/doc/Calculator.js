@@ -3,6 +3,7 @@
  */
 import React from 'react'
 import './Calculator.css'
+
 // function BoilingVerdict(props) {
 //   if (props.celsius >= 100) {
 //     return <p>The water would boil</p>
