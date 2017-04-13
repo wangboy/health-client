@@ -26,6 +26,7 @@ class App extends Component {
         <LoginDialog/>
         <Calculator/>
         <Game/>
+
         
       </div>
     );
