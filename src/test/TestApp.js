@@ -7,6 +7,8 @@ import './TestApp.css'
 import 'es6-promise'
 import 'isomorphic-fetch'
 
+import FetchTest from './FetchTest'
+
 class TestApp extends Component {
   constructor(props) {
     super(props);
@@ -70,8 +72,8 @@ class TestApp extends Component {
   }
 
   componentDidMount() {
-    this.setCountDown();
-    this.interval = setInterval(this.fetchUrl.bind(this), 1000);
+    // this.setCountDown();
+    // this.interval = setInterval(this.fetchUrl.bind(this), 1000);
   }
 
   handleLogin(e) {
@@ -149,6 +151,7 @@ class TestApp extends Component {
 
     return (
       <div className="TestApp">
+        <FetchTest/>
         <p>Fetch : {this.state.fetchResult} , CountDown : {this.state.countDown}</p>
         <br/>
         <button type="button"
@@ -159,6 +162,5 @@ class TestApp extends Component {
     )
   }
 }
-
 
 export default TestApp
