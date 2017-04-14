@@ -24,8 +24,9 @@ class TestApp extends Component {
 
       signUpName: "",
       signUpPass: "",
-      signUpPassConfirm: ""
+      signUpPassConfirm: "",
 
+      current: ""
 
     };
 
@@ -34,37 +35,8 @@ class TestApp extends Component {
     this.handleLogin = this.handleLogin.bind(this);
     this.handleSignUp = this.handleSignUp.bind(this);
     this.changeLoginOrSignUp = this.changeLoginOrSignUp.bind(this);
-  }
-
-  fetchUrl() {
-    if (this.state.countDown > 0) {
-      this.setState((preState) => ({
-        countDown: preState.countDown - 1
-      }));
-    } else {
-      this.setCountDown()
-
-      if (this.state.fetching === false) {
-
-        this.setState({fetching: true, fetchResult: "fetching"})
-
-        console.log();
-
-        fetch('www.baidu.com')
-          .then(response => {
-            this.setState({
-              fetching: false,
-              fetchResult: "success:" + response.status
-            })
-          }).catch(e => {
-          this.setState({
-            fetching: false,
-            fetchResult: "error"
-          })
-        })
-
-      }
-    }
+    this.getOauthToken = this.getOauthToken.bind(this);
+    this.getCurrentUser = this.getCurrentUser.bind(this);
   }
 
   setCountDown() {
@@ -79,11 +51,106 @@ class TestApp extends Component {
   handleLogin(e) {
     e.preventDefault();
     console.log(" click login with" + this.state.loginName + "_" + this.state.loginPass)
+    this.getOauthToken(this.state.loginName, this.state.loginPass, this.getCurrentUser);
   }
 
   handleSignUp(e) {
     e.preventDefault();
     console.log(" click sign up with" + this.state.signUpName + "_" + this.state.signUpPass)
+
+    let headers = new Headers();
+
+    headers.append('Content-Type', 'application/json')
+
+    let init = {
+        method: 'POST',
+        headers: headers,
+        body: JSON.stringify({
+          username: this.state.signUpName,
+          password: this.state.signUpPass
+        })
+      }
+    ;
+    fetch("user/", init)
+      .then((response) => {
+          this.setState((preState) => {
+              this.getOauthToken(this.state.signUpName, this.state.signUpPass, this.getCurrentUser);
+              return {loginName: this.state.signUpName, loginPass: this.state.signUpPass};
+            }
+          );
+        }
+      ).catch(
+      e => {
+        this.removeToken();
+      }
+    )
+  }
+
+  getOauthToken(name, pass, cb) {
+    console.log(" try get token : " + name + " _ " + pass);
+    let header = new Headers();
+    header.append('Authorization', 'Basic YnJvd3Nlcjo=');
+    let init = {
+      method: 'POST',
+      headers: header,
+      body: JSON.stringify({
+        scope: 'ui',
+        username: name,
+        password: pass,
+        grant_type: 'password'
+      })
+    };
+    fetch('uaa/oauth/token', init)
+      .then(response => {
+        console.log(" get token success : " + response.body.toString());
+        return response.json();
+      })
+      .then(json => {
+        // this.setState({accessToken: json.access_token});
+        console.log("store token : " + json.toString());
+        localStorage.setItem('token', json.access_token);
+        return this.getToken()
+      })
+      .then(token => {
+        console.log(" call cb " + cb)
+        cb();
+      })
+      .catch(e => {
+        console.log("get token fail!");
+        this.removeToken();
+      })
+  }
+
+  getCurrentUser() {
+    console.log(" try get current user ");
+    let header = new Headers();
+    header.append('Authorization', 'Bearer' + this.getToken())
+    let init = {
+      method: 'GET',
+      headers: header,
+    };
+
+    fetch('user/current', init)
+      .then(response => {
+        console.log(" get current user success " + response.toString());
+        return response.json()
+      })
+      .then(json => {
+        console.log(" get current user " + json.toString());
+        this.setState({current: json.toString()});
+      })
+      .catch(e => {
+        console.log(" get current user error");
+        this.removeToken()
+      })
+  }
+
+  getToken() {
+    localStorage.getItem('token');
+  }
+
+  removeToken() {
+    localStorage.removeItem('token');
   }
 
 
