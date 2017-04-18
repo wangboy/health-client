@@ -19,7 +19,7 @@ class TestApp extends Component {
       fetchResult: "waiting",
       countDown: 0,
 
-      loginOrSignUp: true,
+      loginOrSignUp: false,
 
       loginCell: "",
       loginPass: "",
@@ -73,6 +73,7 @@ class TestApp extends Component {
 
     let init = {
         method: 'POST',
+        mode: 'no-cors',
         headers: headers,
         body: JSON.stringify({
           cell: this.state.signUpCell,
@@ -84,6 +85,10 @@ class TestApp extends Component {
     ;
     fetch(host + "user/", init)
       .then((response) => {
+
+        console.log(" sign up result " + response.status);
+
+
           this.setState((preState) => {
               this.getOauthToken(this.state.signUpCell, this.state.signUpPass, this.getCurrentUser);
               return {loginCell: this.state.signUpName, loginPass: this.state.signUpPass};
@@ -101,8 +106,10 @@ class TestApp extends Component {
     console.log(" try get token : " + name + " _ " + pass);
     let header = new Headers();
     header.append('Authorization', 'Basic YnJvd3Nlcjo=');
+    header.append('Content-Type', 'application/x-www-form-urlencoded');
     let init = {
       method: 'POST',
+      mode: 'no-cors',
       headers: header,
       body: JSON.stringify({
         scope: 'ui',
@@ -139,6 +146,7 @@ class TestApp extends Component {
     let init = {
       method: 'GET',
       headers: header,
+      mode: 'no-cors',
     };
 
     fetch(host + 'user/current', init)
@@ -168,7 +176,7 @@ class TestApp extends Component {
   handleInput(e) {
     var input = e.target.value;
 
-    console.log(" input " + input + " in " + e.target)
+    // console.log(" input " + input + " in " + e.target)
 
     if (e.target === this._loginPassword) {
       this.setState({loginPass: input});
@@ -214,9 +222,9 @@ class TestApp extends Component {
           <fieldset>
             <legend>SingUp Table:</legend>
             <p>SignUp cell: </p><input type="text" value={this.state.signUpCell} ref={it => this._signUpCell = it}
-                                       onChange={this.handleInput}/><br/>
+                                       onChange={this.handleInput} placeholder="13522098888"/><br/>
             <p>SignUp Name: </p><input type="text" value={this.state.signUpName} ref={it => this._signUpName = it}
-                                       onChange={this.handleInput}/><br/>
+                                       onChange={this.handleInput} placeholder="wangbo"/><br/>
             <p>SignUp Password: </p><input type="password" value={this.state.signUpPass}
                                            ref={it => this._signUpPass = it} onChange={this.handleInput}/><br/>
             <p>SignUp Password Confirm: </p><input type="password" value={this.state.signUpPassConfirm}
