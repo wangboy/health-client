@@ -3,11 +3,11 @@ import React, {Component} from 'react';
 import logo from './logo.svg';
 import './App.css';
 
-import Timer from './doc/Timer'
-import Calculator from './doc/Calculator'
-import LoginDialog from './doc/Dialog'
-import FilterableProductTable from './doc/FilterableProductTable'
-import Game from './ticgame/tic'
+// import Timer from './doc/Timer'
+// import Calculator from './doc/Calculator'
+// import LoginDialog from './doc/Dialog'
+// import FilterableProductTable from './doc/FilterableProductTable'
+// import Game from './ticgame/tic'
 
 class App extends Component {
   render() {
@@ -21,12 +21,12 @@ class App extends Component {
           To get started, edit <code>src/App.js</code> and save to reload.
         </p>
 
-        <FilterableProductTable search=""/>
+        {/*<FilterableProductTable search=""/>*/}
 
-        <Timer/>
-        <LoginDialog/>
-        <Calculator/>
-        <Game/>
+        {/*<Timer/>*/}
+        {/*<LoginDialog/>*/}
+        {/*<Calculator/>*/}
+        {/*<Game/>*/}
 
 
       </div>

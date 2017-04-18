@@ -2,12 +2,31 @@
  * Created by wangbo on 16/04/2017.
  */
 
-import {Router, Route, hashHistory} from 'react-router'
-import * as React from "react";
+import {BrowserRouter as Router, Route, Link} from 'react-router-dom'
+import React from "react";
 import App from './App'
 
-let AppRouter =
-  <Router history={hashHistory}>
-    <Route path="/" component={App}/>
-  </Router>
+import Timer from './doc/Timer'
+import Game from './ticgame/tic'
+
+
+let AppRouter = () =>
+  (
+    <Router>
+      <div>
+        <ul>
+          <li><Link to="/">Home</Link></li>
+          <li><Link to="/game">Game</Link></li>
+          <li><Link to="/timer">Timer</Link></li>
+        </ul>
+
+        <hr/>
+
+        <Route exact path="/" component={App}/>
+        <Route path="/game" component={Game}/>
+        <Route path="/timer" component={Timer}/>
+      </div>
+
+    </Router>
+  )
 export default AppRouter

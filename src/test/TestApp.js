@@ -9,6 +9,8 @@ import 'isomorphic-fetch'
 
 import FetchTest from './FetchTest'
 
+const host = 'http://localhost:10000/'
+
 class TestApp extends Component {
   constructor(props) {
     super(props);
@@ -19,9 +21,10 @@ class TestApp extends Component {
 
       loginOrSignUp: true,
 
-      loginName: "",
+      loginCell: "",
       loginPass: "",
 
+      signUpCell: "",
       signUpName: "",
       signUpPass: "",
       signUpPassConfirm: "",
@@ -50,13 +53,19 @@ class TestApp extends Component {
 
   handleLogin(e) {
     e.preventDefault();
-    console.log(" click login with" + this.state.loginName + "_" + this.state.loginPass)
-    this.getOauthToken(this.state.loginName, this.state.loginPass, this.getCurrentUser);
+    console.log(" click login with" + this.state.loginCell + "_" + this.state.loginPass)
+    this.getOauthToken(this.state.loginCell, this.state.loginPass, this.getCurrentUser);
   }
 
   handleSignUp(e) {
     e.preventDefault();
-    console.log(" click sign up with" + this.state.signUpName + "_" + this.state.signUpPass)
+    console.log(
+      `clike sign up with
+      ${this.state.signUpCell}
+      ${this.state.signUpName}
+      ${this.state.signUpPass}
+      `
+    )
 
     let headers = new Headers();
 
@@ -66,16 +75,18 @@ class TestApp extends Component {
         method: 'POST',
         headers: headers,
         body: JSON.stringify({
-          username: this.state.signUpName,
-          password: this.state.signUpPass
+          cell: this.state.signUpCell,
+          name: this.state.signUpName,
+          password: this.state.signUpPass,
+          role: 'user'
         })
       }
     ;
-    fetch("user/", init)
+    fetch(host + "user/", init)
       .then((response) => {
           this.setState((preState) => {
-              this.getOauthToken(this.state.signUpName, this.state.signUpPass, this.getCurrentUser);
-              return {loginName: this.state.signUpName, loginPass: this.state.signUpPass};
+              this.getOauthToken(this.state.signUpCell, this.state.signUpPass, this.getCurrentUser);
+              return {loginCell: this.state.signUpName, loginPass: this.state.signUpPass};
             }
           );
         }
@@ -100,7 +111,7 @@ class TestApp extends Component {
         grant_type: 'password'
       })
     };
-    fetch('uaa/oauth/token', init)
+    fetch(host + 'uaa/oauth/token', init)
       .then(response => {
         console.log(" get token success : " + response.body.toString());
         return response.json();
@@ -130,7 +141,7 @@ class TestApp extends Component {
       headers: header,
     };
 
-    fetch('user/current', init)
+    fetch(host + 'user/current', init)
       .then(response => {
         console.log(" get current user success " + response.toString());
         return response.json()
@@ -161,14 +172,16 @@ class TestApp extends Component {
 
     if (e.target === this._loginPassword) {
       this.setState({loginPass: input});
-    } else if (e.target === this._loginName) {
-      this.setState({loginName: input});
+    } else if (e.target === this._loginCell) {
+      this.setState({loginCell: input});
     } else if (e.target === this._signUpName) {
       this.setState({signUpName: input});
     } else if (e.target === this._signUpPass) {
       this.setState({signUpPass: input});
     } else if (e.target === this._signUpPassConfirm) {
       this.setState({signUpPassConfirm: input});
+    } else if (e.target === this._signUpCell) {
+      this.setState({signUpCell: input})
     }
   }
 
@@ -183,7 +196,7 @@ class TestApp extends Component {
         <form onSubmit={this.handleLogin}>
           <fieldset>
             <legend>Login Table:</legend>
-            <p>LoginName: </p><input type="text" value={this.state.loginName} ref={it => this._loginName = it}
+            <p>LoginCell: </p><input type="text" value={this.state.loginCell} ref={it => this._loginCell = it}
                                      onChange={this.handleInput}/><br/>
             <p>Password: </p><input type="password" value={this.state.loginPass} ref={it => this._loginPassword = it}
                                     onChange={this.handleInput}/><br/>
@@ -200,6 +213,8 @@ class TestApp extends Component {
         <form onSubmit={this.handleSignUp}>
           <fieldset>
             <legend>SingUp Table:</legend>
+            <p>SignUp cell: </p><input type="text" value={this.state.signUpCell} ref={it => this._signUpCell = it}
+                                       onChange={this.handleInput}/><br/>
             <p>SignUp Name: </p><input type="text" value={this.state.signUpName} ref={it => this._signUpName = it}
                                        onChange={this.handleInput}/><br/>
             <p>SignUp Password: </p><input type="password" value={this.state.signUpPass}
@@ -215,7 +230,6 @@ class TestApp extends Component {
   }
 
   render() {
-
     return (
       <div className="TestApp">
         <FetchTest/>

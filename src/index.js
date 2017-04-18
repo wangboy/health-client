@@ -3,12 +3,12 @@ import ReactDOM from 'react-dom';
 import './index.css';
 
 //--------------------------------------------
-// import TestApp from "./test/TestApp";
-//
-// ReactDOM.render(
-//   <TestApp />,
-//   document.getElementById('root')
-// );
+import TestApp from "./test/TestApp";
+
+ReactDOM.render(
+  <TestApp />,
+  document.getElementById('root')
+);
 //-----------------------------------------
 // import App from "./App";
 //
@@ -17,19 +17,9 @@ import './index.css';
 //   document.getElementById('root')
 // );
 //--------------------------------------------
-// import AppRouter from "./AppRouter";
-//
+// import AppRouter from './AppRouter'
 // ReactDOM.render(
-//   <AppRouter />,
+//   <AppRouter/>,
 //   document.getElementById('root')
 // );
 //---------------------------------------------
-import {Router, Route} from 'react-router';
-import App from './App'
-
-ReactDOM.render(
-  <Router >
-    <Route path="/" component={App}/>
-  </Router>,
-  document.getElementById('root')
-);
