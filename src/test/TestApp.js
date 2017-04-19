@@ -9,8 +9,6 @@ import 'isomorphic-fetch'
 
 import FetchTest from './FetchTest'
 
-const host = 'http://localhost:10000/'
-
 class TestApp extends Component {
   constructor(props) {
     super(props);
@@ -73,21 +71,20 @@ class TestApp extends Component {
 
     let init = {
         method: 'POST',
-        mode: 'no-cors',
+        // mode: 'no-cors',
         headers: headers,
         body: JSON.stringify({
           cell: this.state.signUpCell,
           name: this.state.signUpName,
           password: this.state.signUpPass,
-          role: 'user'
+          role: 'USER'
         })
       }
     ;
-    fetch(host + "user/", init)
+    fetch("/user/", init)
       .then((response) => {
 
-        console.log(" sign up result " + response.status);
-
+          console.log(" sign up result " + response.status);
 
           this.setState((preState) => {
               this.getOauthToken(this.state.signUpCell, this.state.signUpPass, this.getCurrentUser);
@@ -106,19 +103,14 @@ class TestApp extends Component {
     console.log(" try get token : " + name + " _ " + pass);
     let header = new Headers();
     header.append('Authorization', 'Basic YnJvd3Nlcjo=');
-    header.append('Content-Type', 'application/x-www-form-urlencoded');
+    header.append('Content-Type', 'application/x-www-form-urlencoded;charset=utf-8');
     let init = {
       method: 'POST',
-      mode: 'no-cors',
+      // mode: 'no-cors',
       headers: header,
-      body: JSON.stringify({
-        scope: 'ui',
-        username: name,
-        password: pass,
-        grant_type: 'password'
-      })
+      body: `scope=ui&username=${name}&password=${pass}&grant_type=password`
     };
-    fetch(host + 'uaa/oauth/token', init)
+    fetch('/uaa/oauth/token', init)
       .then(response => {
         console.log(" get token success : " + response.body.toString());
         return response.json();
@@ -134,7 +126,7 @@ class TestApp extends Component {
         cb();
       })
       .catch(e => {
-        console.log("get token fail!");
+        console.log("get token fail!" + e.message);
         this.removeToken();
       })
   }
@@ -146,10 +138,10 @@ class TestApp extends Component {
     let init = {
       method: 'GET',
       headers: header,
-      mode: 'no-cors',
+      // mode: 'no-cors',
     };
 
-    fetch(host + 'user/current', init)
+    fetch('/user/current', init)
       .then(response => {
         console.log(" get current user success " + response.toString());
         return response.json()
