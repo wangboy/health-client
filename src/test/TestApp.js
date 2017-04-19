@@ -73,6 +73,7 @@ class TestApp extends Component {
         method: 'POST',
         // mode: 'no-cors',
         headers: headers,
+        credentials: 'include',
         body: JSON.stringify({
           cell: this.state.signUpCell,
           name: this.state.signUpName,
@@ -107,19 +108,22 @@ class TestApp extends Component {
     let init = {
       method: 'POST',
       // mode: 'no-cors',
+      credentials: 'include',
       headers: header,
       body: `scope=ui&username=${name}&password=${pass}&grant_type=password`
     };
     fetch('/uaa/oauth/token', init)
       .then(response => {
-        console.log(" get token success : " + response.body.toString());
+        console.log(" get token success : " + response.toString());
         return response.json();
       })
       .then(json => {
         // this.setState({accessToken: json.access_token});
-        console.log("store token : " + json.toString());
-        localStorage.setItem('token', json.access_token);
-        return this.getToken()
+        let token = json.access_token;
+        console.log("store token : " + token);
+        localStorage.setItem('token', token);
+        // return this.getToken()
+        return token;
       })
       .then(token => {
         console.log(" call cb " + cb)
@@ -134,9 +138,11 @@ class TestApp extends Component {
   getCurrentUser() {
     console.log(" try get current user ");
     let header = new Headers();
-    header.append('Authorization', 'Bearer' + this.getToken())
+    let token = this.getToken();
+    header.append('Authorization', 'Bearer' + token)
     let init = {
       method: 'GET',
+      credentials: 'include',
       headers: header,
       // mode: 'no-cors',
     };
@@ -157,7 +163,7 @@ class TestApp extends Component {
   }
 
   getToken() {
-    localStorage.getItem('token');
+    return localStorage.getItem('token');
   }
 
   removeToken() {
