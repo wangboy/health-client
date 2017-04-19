@@ -7,6 +7,8 @@ import './TestApp.css'
 import 'es6-promise'
 import 'isomorphic-fetch'
 
+import RaisedButton from 'material-ui/RaisedButton'
+
 import FetchTest from './FetchTest'
 
 class TestApp extends Component {
@@ -238,6 +240,9 @@ class TestApp extends Component {
   render() {
     return (
       <div className="TestApp">
+
+        <RaisedButton label="Default"/>
+
         <FetchTest/>
         <p>Fetch : {this.state.fetchResult} , CountDown : {this.state.countDown}</p>
         <br/>
