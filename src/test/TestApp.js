@@ -40,6 +40,8 @@ class TestApp extends Component {
     this.changeLoginOrSignUp = this.changeLoginOrSignUp.bind(this);
     this.getOauthToken = this.getOauthToken.bind(this);
     this.getCurrentUser = this.getCurrentUser.bind(this);
+
+    this.handleInput = this.handleInput.bind(this);
   }
 
   setCountDown() {
@@ -49,6 +51,10 @@ class TestApp extends Component {
   componentDidMount() {
     // this.setCountDown();
     // this.interval = setInterval(this.fetchUrl.bind(this), 1000);
+  }
+
+  handleTouch(e){
+    console.log(`handle touch ${e} ${e.target}`)
   }
 
   handleLogin(e) {
@@ -241,7 +247,7 @@ class TestApp extends Component {
     return (
       <div className="TestApp">
 
-        <RaisedButton label="Default"/>
+        <RaisedButton label="Default" primary={true} onTouchTap={this.handleTouch}/>
 
         <FetchTest/>
         <p>Fetch : {this.state.fetchResult} , CountDown : {this.state.countDown}</p>
@@ -254,5 +260,7 @@ class TestApp extends Component {
     )
   }
 }
+
+
 
 export default TestApp
