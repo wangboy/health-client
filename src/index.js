@@ -1,8 +1,8 @@
 import React from "react";
 import ReactDOM from "react-dom";
 
-import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
-import injectTapEventPlugin from "react-tap-event-plugin";
+// import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
+// import injectTapEventPlugin from "react-tap-event-plugin";
 
 import "./index.css";
 //-----------------------------------------
@@ -31,22 +31,28 @@ import "./index.css";
 //   document.getElementById('root')
 // );
 //---------------------------------------------
-import Login from "./health/Login";
+// import Login from "./health/Login";
 
 //--------------------------------------------
 
 // Needed for onTouchTap
 // http://stackoverflow.com/a/34015469/988941
-injectTapEventPlugin();
+// injectTapEventPlugin();
+//
+//
+// const App = () => (
+//   <MuiThemeProvider>
+//     <Login/>
+//   </MuiThemeProvider>
+// )
+// ReactDOM.render(
+//   <App/>,
+//   document.getElementById('root')
+// );
+//---------------------------------------------
+import App from './health/HealthApp'
 
-
-const App = () => (
-  <MuiThemeProvider>
-    <Login/>
-  </MuiThemeProvider>
-)
 ReactDOM.render(
   <App/>,
   document.getElementById('root')
 );
-//---------------------------------------------

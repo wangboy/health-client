@@ -2,7 +2,6 @@
  * Created by wangbo on 2017/4/13.
  */
 import React, {Component} from  'react';
-import './TestApp.css'
 
 import 'es6-promise'
 import 'isomorphic-fetch'
